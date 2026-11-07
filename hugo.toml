@@ -1,0 +1,36 @@
+baseURL = 'https://www.williamlong.info/'
+locale = 'zh-CN'
+defaultContentLanguage = 'zh'
+title = '月光博客'
+hasCJKLanguage = true
+enableRobotsTXT = true
+uglyURLs = true
+disablePathToLower = true
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[pagination]
+  pagerSize = 50
+  path = "page"
+
+[params]
+mainSections = ["weibo","google","movie","info","apps"]
+author = "月光"
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
+
+[outputs]
+home = ["HTML","RSS"]
+section = ["HTML","RSS"]
+taxonomy = []
+term = ["HTML"]
+
+[outputFormats.RSS]
+baseName = "rss"
+
+[services.rss]
+limit = 20
