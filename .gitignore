@@ -1,0 +1,7 @@
+# Hugo 构建产物，不纳入 Git 版本管理（可随时删除重建）
+public/
+docs/
+
+# Z-Blog Access 原始数据库备份（Hugo 构建不读取）
+mdb/
+*.mdb
