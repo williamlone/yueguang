@@ -12,7 +12,7 @@ disablePathToLower = true
   tag = "tags"
 
 [pagination]
-  pagerSize = 50
+  pagerSize = 40
   path = "page"
 
 [params]
@@ -29,11 +29,33 @@ disablePathToLower = true
 [outputs]
 home = ["HTML","RSS"]
 section = ["HTML","RSS"]
+# 词条页不用 Hugo 原生 term 页：原生 term 是全局的，无法做到分区隔离。
+# 六个分区的 tag/cat 页统一由 content/_content.gotmpl 生成。
 taxonomy = []
-term = ["HTML"]
+term = []
 
 [outputFormats.RSS]
 baseName = "rss"
 
 [services.rss]
 limit = 20
+
+[related]
+  threshold = 1
+  includeNewer = true
+  toLower = false
+
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+
+  [[related.indices]]
+    name = "categories"
+    weight = 50
+
+[markup.highlight]
+  # 直接把配色写进 HTML，省掉额外的 Chroma 样式文件
+  # friendly 是浅色配色，和 SimplePro 的蓝白主题一致
+  style = "friendly"
+  noClasses = true
+  guessSyntax = true

@@ -1,0 +1,28 @@
+{{- $prefix := "" -}}
+{{- if ne .key "main" -}}
+	{{- $prefix = printf "/%s" .key -}}
+{{- end -}}
+{{- $segment := cond (eq .taxonomy "categories") "cat" "tag" -}}
+{{- $stem := printf "%s/%s/%s" $prefix $segment .slug -}}
+{{- if gt .total 1 -}}
+<div class="pagination clearfix">
+	{{- if gt .page 1 }}
+		{{- $prev := printf "%s.html" $stem -}}
+		{{- if gt .page 2 }}{{ $prev = printf "%s/page/%d.html" $stem (sub .page 1) }}{{ end }}
+	<a class="prev page-numbers" href="{{ $prev }}">上一页</a>
+	{{- end }}
+	{{- range $n := seq 1 .total }}
+		{{- if eq $n $.page }}
+	<span class="current">{{ $n }}</span>
+		{{- else }}
+			{{- $url := printf "%s.html" $stem }}
+			{{- if gt $n 1 }}{{ $url = printf "%s/page/%d.html" $stem $n }}{{ end }}
+	<a class="page-numbers" href="{{ $url }}">{{ $n }}</a>
+		{{- end }}
+	{{- end }}
+	{{- if lt .page .total }}
+		{{- $next := printf "%s/page/%d.html" $stem (add .page 1) }}
+	<a class="next page-numbers" href="{{ $next }}">下一页</a>
+	{{- end }}
+</div>
+{{- end -}}

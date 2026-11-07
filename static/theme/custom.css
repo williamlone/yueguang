@@ -1,0 +1,93 @@
+/*
+ * 在 SimplePro 原样式之后加载的小补丁
+ * 1. 原主题会跟随系统进入深色模式，这里强制保持蓝白配色
+ * 2. 补齐代码高亮、文章配图等 Hugo 模板新增内容的样式
+ */
+
+/* 强制浅色，不启用深色模式 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #F1F1F1;
+    --box-color: #FFFFFF;
+    --text-color: #000000;
+    --title-color: #424242;
+  }
+}
+
+/* 代码块 */
+.entry-content pre {
+  margin: 1em 0;
+  padding: 12px 14px;
+  overflow-x: auto;
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  line-height: 1.6;
+}
+
+.entry-content pre code {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 14px;
+}
+
+.entry-content :not(pre) > code {
+  display: inline;
+  margin: 0 2px;
+  padding: 2px 5px;
+  background: #f1f1f1;
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 14px;
+}
+
+/* 相关文章列表 */
+.related-posts {
+  margin-top: 10px;
+}
+
+.related-posts li {
+  padding: 4px 0;
+  list-style: inside;
+}
+
+/* 词条页/列表页不需要额外标题时，让第一条紧贴顶部 */
+.content > .entry:first-child {
+  margin-top: 0;
+}
+
+/* 搜索栏：搜索引擎下拉 */
+.search-engine-row {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  margin-top: 8px;
+}
+
+.search-engine-row label {
+  flex: 0 0 auto;
+  margin-right: 8px;
+  color: #666;
+  font-size: 13px;
+}
+
+#searchEngine {
+  flex: 1 1 auto;
+  width: 150px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  outline: none;
+  color: #444;
+  background-color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#searchEngine:focus {
+  border-color: #64A7BF;
+}
+

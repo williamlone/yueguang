@@ -1,0 +1,22 @@
+{{- $key := partial "section-key.html" . -}}
+{{- $sec := index hugo.Data.sections $key -}}
+<div class="header_wrap">
+	<div id="header" class="clearfix">
+		<div id="logo">
+			<h2><a href="{{ $sec.home }}" title="{{ $sec.name }}" rel="home bookmark">{{ $sec.name }}</a></h2>
+		</div><!-- END logo -->
+	</div><!-- END header -->
+	<label for="menu-toggle" class="navbar-toggle collapsed">
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+	</label>
+	<div id="navigation" class="clearfix">
+		<input type="checkbox" id="menu-toggle" class="hidden"/>
+		<ul class="sf-menu navbar-nav">
+			{{- range $sec.nav }}
+			<li><a href="{{ .url }}"{{ if eq .url $sec.home }} target="_self"{{ end }}>{{ .label }}</a></li>
+			{{- end }}
+		</ul>
+	</div><!-- END navigation -->
+</div>

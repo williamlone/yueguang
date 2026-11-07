@@ -1,0 +1,9 @@
+{{- $key := "main" -}}
+{{- with .Params.sectionkey -}}
+  {{- $key = . -}}
+{{- else -}}
+  {{- if and .Section (ne .Section "archives") -}}
+    {{- $key = .Section -}}
+  {{- end -}}
+{{- end -}}
+{{- return $key -}}

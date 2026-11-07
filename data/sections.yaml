@@ -1,0 +1,91 @@
+# 六个分区的站点名、副标题和导航菜单
+# 新增分区时：在这里加一段，并在 content 下建对应目录，然后重跑 scripts/generate_terms.py
+
+order:
+  - main
+  - weibo
+  - google
+  - movie
+  - info
+  - apps
+
+main:
+  name: 月光博客
+  subtitle: 关注互联网和搜索引擎的IT科技博客
+  home: /
+  nav:
+    - { label: 首页, url: / }
+    - { label: 推荐, url: /archives/2.html }
+    - { label: 业界, url: /cat/tech.html }
+    - { label: 互联网, url: /cat/internet.html }
+    - { label: 软件, url: /cat/software.html }
+    - { label: 编程, url: /cat/program.html }
+    - { label: 建站, url: /cat/webmaster.html }
+    - { label: 引擎, url: /cat/seo.html }
+    - { label: 地图, url: /cat/map.html }
+    - { label: 观察, url: /google/ }
+    - { label: 微博, url: /weibo/ }
+    - { label: 影评, url: /movie/ }
+    - { label: 更多, url: /archives/ }
+
+weibo:
+  name: 月光微博客
+  subtitle: 月光博客的微型博客和微型网志
+  home: /weibo/
+  nav:
+    - { label: 首页, url: /weibo/ }
+    - { label: 新闻, url: /weibo/cat/news.html }
+    - { label: 评论, url: /weibo/cat/review.html }
+    - { label: 网络, url: /weibo/cat/blog.html }
+    - { label: 软件, url: /weibo/cat/software.html }
+    - { label: 生活, url: /weibo/cat/other.html }
+    - { label: 更多, url: /weibo/archives/ }
+
+google:
+  name: 谷歌地图观察
+  subtitle: Google Earth卫星地图下载,坐标等
+  home: /google/
+  nav:
+    - { label: 首页, url: /google/ }
+    - { label: 世界奇趣, url: /google/cat/fun.html }
+    - { label: 地标合集, url: /google/cat/collection.html }
+    - { label: 自然景观, url: /google/cat/nature.html }
+    - { label: 旅游交通, url: /google/cat/travel.html }
+    - { label: 人文历史, url: /google/cat/culture.html }
+
+movie:
+  name: 电影评论
+  subtitle: 提供最新的电影介绍及评论
+  home: /movie/
+  nav:
+    - { label: 首页, url: /movie/ }
+    - { label: 欧美电影, url: /movie/cat/us.html }
+    - { label: 日韩电影, url: /movie/cat/jp.html }
+    - { label: 港台电影, url: /movie/cat/hk.html }
+    - { label: 大陆电影, url: /movie/cat/cn.html }
+
+info:
+  name: 网站运营优化
+  subtitle: 网站设计、开发、策划、运营、优化和推广等
+  home: /info/
+  nav:
+    - { label: 首页, url: /info/ }
+    - { label: 动态, url: /info/cat/news.html }
+    - { label: 评论, url: /info/cat/review.html }
+    - { label: 策划, url: /info/cat/plan.html }
+    - { label: 设计, url: /info/cat/design.html }
+    - { label: 运营, url: /info/cat/service.html }
+    - { label: SEO, url: /info/cat/seo.html }
+    - { label: 应用, url: /info/cat/application.html }
+    - { label: 服务器, url: /info/cat/server.html }
+    - { label: 编程, url: /info/cat/program.html }
+
+apps:
+  name: 移动应用观察
+  subtitle: iPhone、Android免费应用和经典软件推荐
+  home: /apps/
+  nav:
+    - { label: 首页, url: /apps/ }
+    - { label: iPhone, url: /apps/tag/iPhone.html }
+    - { label: iPad, url: /apps/tag/iPad.html }
+    - { label: Android, url: /apps/tag/Android.html }

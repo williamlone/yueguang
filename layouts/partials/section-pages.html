@@ -1,0 +1,8 @@
+{{- $key := partial "section-key.html" . -}}
+{{- $section := "archives" -}}
+{{- if ne $key "main" -}}
+  {{- $section = $key -}}
+{{- end -}}
+{{- $pages := where site.RegularPages "Section" $section -}}
+{{- $pages = where $pages "Type" "not in" (slice "termpage" "listpage") -}}
+{{- return $pages -}}

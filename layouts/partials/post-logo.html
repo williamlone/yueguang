@@ -1,0 +1,27 @@
+{{- /*
+  主站文章正文的标签配图，仅 main 生效。
+  position="top"    → 正文开头：gif 图标，靠右浮动，链接到本分区标签页
+  position="bottom" → 正文结尾：jpg 配图，居中显示
+  文件不存在时跳过对应那张。
+*/ -}}
+{{- $page := .page -}}
+{{- $position := .position -}}
+{{- $key := partial "section-key.html" $page -}}
+{{- if eq $key "main" -}}
+	{{- $tagMap := index hugo.Data.terms "main" "tags" -}}
+	{{- with index $page.Params.tags 0 -}}
+		{{- $name := . -}}
+		{{- $slug := index $tagMap $name -}}
+		{{- if $slug -}}
+			{{- $ext := "jpg" -}}
+			{{- if eq $position "top" }}{{ $ext = "gif" }}{{ end -}}
+			{{- if os.FileExists (printf "static/logo/%s.%s" $slug $ext) -}}
+				{{- if eq $position "top" }}
+<a href="{{ partial "term-url.html" (dict "key" "main" "taxonomy" "tag" "slug" $slug) }}" rel="tag"><img src="/logo/{{ $slug }}.gif" alt="{{ $name }}" class="thumb" width="80" height="80" /></a>
+				{{- else }}
+<p style="text-align:center"><img src="/logo/{{ $slug }}.jpg" alt="{{ $name }}"></p>
+				{{- end -}}
+			{{- end -}}
+		{{- end -}}
+	{{- end -}}
+{{- end -}}

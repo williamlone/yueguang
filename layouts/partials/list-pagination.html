@@ -1,0 +1,22 @@
+{{- $base := .base -}}
+{{- if gt .total 1 -}}
+<div class="pagination clearfix">
+	{{- if gt .page 1 }}
+		{{- $prev := printf "%s/page/%d.html" $base (sub .page 1) }}
+		{{- if eq (sub .page 1) 1 }}{{ $prev = cond (eq $base "") "/" (printf "%s/" $base) }}{{ end }}
+	<a class="prev page-numbers" href="{{ $prev }}">上一页</a>
+	{{- end }}
+	{{- range $n := seq 1 .total }}
+		{{- if eq $n $.page }}
+	<span class="current">{{ $n }}</span>
+		{{- else }}
+			{{- $url := printf "%s/page/%d.html" $base $n }}
+			{{- if eq $n 1 }}{{ $url = cond (eq $base "") "/" (printf "%s/" $base) }}{{ end }}
+	<a class="page-numbers" href="{{ $url }}">{{ $n }}</a>
+		{{- end }}
+	{{- end }}
+	{{- if lt .page .total }}
+	<a class="next page-numbers" href="{{ printf "%s/page/%d.html" $base (add .page 1) }}">下一页</a>
+	{{- end }}
+</div>
+{{- end -}}

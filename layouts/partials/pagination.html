@@ -1,0 +1,18 @@
+{{- $pag := .Paginator -}}
+{{- if gt $pag.TotalPages 1 -}}
+<div class="pagination clearfix">
+	{{- if $pag.HasPrev }}
+	<a class="prev page-numbers" href="{{ $pag.Prev.URL }}">上一页</a>
+	{{- end }}
+	{{- range $pag.Pagers }}
+		{{- if eq .PageNumber $pag.PageNumber }}
+	<span class="current">{{ .PageNumber }}</span>
+		{{- else }}
+	<a class="page-numbers" href="{{ .URL }}">{{ .PageNumber }}</a>
+		{{- end }}
+	{{- end }}
+	{{- if $pag.HasNext }}
+	<a class="next page-numbers" href="{{ $pag.Next.URL }}">下一页</a>
+	{{- end }}
+</div>
+{{- end -}}

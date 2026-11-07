@@ -1,0 +1,48 @@
+{{- $key := partial "section-key.html" . -}}
+{{- $sec := index hugo.Data.sections $key -}}
+{{- $title := printf "%s-%s" $sec.name $sec.subtitle -}}
+{{- if .IsPage -}}
+	{{- if .Params.termpage -}}
+		{{- $title = printf "%s-%s" .Title $sec.name -}}
+	{{- else -}}
+		{{- $title = printf "%s -%s" (strings.TrimSpace .Title) $sec.name -}}
+	{{- end -}}
+{{- end -}}
+{{- $isListPage := or (eq .Type "termpage") (eq .Type "listpage") -}}
+{{- $desc := $sec.subtitle -}}
+{{- with .Description }}{{ $desc = . }}{{ end -}}
+{{- if and .IsPage (not $isListPage) -}}
+	{{- $desc = .Summary | plainify | truncate 120 -}}
+{{- end -}}
+{{- $rss := "/rss.xml" -}}
+{{- if ne $key "main" }}{{ $rss = printf "/%s/rss.xml" $key }}{{ end -}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="applicable-device" content="pc,mobile">
+	<link rel="icon" href="/images/favicon.ico">
+	<link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon.png">
+	<link rel="stylesheet" type="text/css" media="all" href="/theme/style.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/theme/custom.css">
+	<title>{{ $title }}</title>
+	<meta name="description" content="{{ $desc }}">
+	<meta name="keywords" content="{{ site.Params.keywords }}">
+	<link rel="canonical" href="{{ .Permalink }}">
+	<link rel="alternate" type="application/rss+xml" href="{{ $rss }}" title="{{ $sec.name }}">
+</head>
+<body class="{{ if and .IsPage (not $isListPage) }}single{{ else }}home blog{{ end }}">
+<div id="wrap" class="container clearfix">
+	{{ partial "header.html" . }}
+	<div id="main" class="container">
+		<div class="content alpha">
+			{{ block "main" . }}{{ end }}
+		</div><!-- END content -->
+		{{ partial "sidebar.html" . }}
+	</div><!-- END container -->
+</div><!-- END wrap -->
+{{ partial "footer.html" . }}
+<script src="/theme/search.js" defer></script>
+</body>
+</html>

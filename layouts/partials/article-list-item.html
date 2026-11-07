@@ -1,0 +1,23 @@
+{{- $key := partial "section-key.html" . -}}
+{{- $catMap := index hugo.Data.terms $key "cats" -}}
+<div class="entry clearfix">
+	<h1><a class="post-title" href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a></h1>
+	<div class="post-meta">
+		{{ .Date.Format "2006年1月2日" }} |
+		分类:
+		{{- range $i, $c := .Params.categories -}}
+			{{- if $i }}、{{ end -}}
+			{{- $slug := index $catMap $c -}}
+			{{- if $slug -}}
+				<a href="{{ partial "term-url.html" (dict "key" $key "taxonomy" "cat" "slug" $slug) }}" title="{{ $c }}" rel="category tag">{{ $c }}</a>
+			{{- else -}}
+				{{ $c }}
+			{{- end -}}
+		{{- end }}
+	</div>
+	<div class="clear"></div>
+	<div class="entry-content">
+		{{ .Summary | plainify | htmlUnescape }}
+		<span class="readmore"><a href="{{ .RelPermalink }}">阅读全文...</a></span>
+	</div>
+</div>

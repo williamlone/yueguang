@@ -1,0 +1,28 @@
+{{- /*
+  把正文里的 upload 图片/文件地址统一指向 CDN，并补上分区前缀。
+  规则：
+    /upload/x、upload/x                    → {cdn}/{section}/upload/x（主站不加 section）
+    /movie/upload/x、movie/upload/x        → {cdn}/movie/upload/x（保留显式分区）
+    http(s)://www.williamlong.info/...upload/... → {cdn}/...（只换域名）
+  参数：destination 原始地址，page 当前页面。
+*/ -}}
+{{- $dest := .destination -}}
+{{- $page := .page -}}
+{{- $cdn := site.Params.image_cdn -}}
+{{- if findRE `^(?:https?:)?//(?:www\.)?williamlong\.info/` $dest -}}
+	{{- if in $dest "/upload/" -}}
+		{{- $rest := replaceRE `^(?:https?:)?//(?:www\.)?williamlong\.info` "" $dest -}}
+		{{- $dest = printf "%s%s" $cdn $rest -}}
+	{{- end -}}
+{{- else -}}
+	{{- $path := strings.TrimPrefix "/" $dest -}}
+	{{- if hasPrefix $path "upload/" -}}
+		{{- $key := partial "section-key.html" $page -}}
+		{{- $prefix := "" -}}
+		{{- if ne $key "main" }}{{ $prefix = printf "/%s" $key }}{{ end -}}
+		{{- $dest = printf "%s%s/%s" $cdn $prefix $path -}}
+	{{- else if findRE `^(weibo|google|movie|info|apps)/upload/` $path 1 -}}
+		{{- $dest = printf "%s/%s" $cdn $path -}}
+	{{- end -}}
+{{- end -}}
+{{- return $dest -}}

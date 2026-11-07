@@ -1,0 +1,29 @@
+# 搜索栏配置
+# 增删搜索引擎、调整顺序、切换默认引擎都只改本文件，不需要动模板。
+#
+# default  默认引擎的 id
+# site     全站限定条件；引擎的 site 为 true 时，会自动在关键词前加上 "site:这段内容"
+# engines  引擎列表
+#   id     唯一标识，同时作为下拉框的 value 和选择记忆的 key
+#   name   下拉框里显示的名称
+#   url    查询地址模板，{q} 会被替换成 URL 编码后的关键词
+#   param  查询参数名（无 JS 时表单直接提交用）
+#   site   是否加 site: 限定。不支持 site: 的引擎设为 false，只按关键词搜索
+default: bing
+site: williamlong.info
+engines:
+  - id: bing
+    name: Bing
+    url: "https://cn.bing.com/search?q={q}"
+    param: q
+    site: true
+  - id: google
+    name: Google
+    url: "https://www.google.com/search?q={q}"
+    param: q
+    site: true
+  - id: baidu
+    name: 百度
+    url: "https://www.baidu.com/s?wd={q}"
+    param: wd
+    site: true

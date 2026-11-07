@@ -1,0 +1,7 @@
+{{ define "main" }}
+{{- $key := partial "section-key.html" . -}}
+{{- $terms := index hugo.Data.terms $key -}}
+{{- $pages := partial "section-pages.html" . -}}
+{{- $base := strings.TrimSuffix "/index.html" (strings.TrimSuffix "/" .RelPermalink) -}}
+{{ partial "render-list.html" (dict "pages" $pages "page" 1 "total" $terms.list_page_count "base" $base) }}
+{{ end }}

@@ -1,0 +1,4 @@
+{{ define "main" }}
+{{- $pages := partial "section-pages.html" . -}}
+{{ partial "render-list.html" (dict "pages" $pages "page" (int .Params.page) "total" (int .Params.totalpages) "base" .Params.base) }}
+{{ end }}

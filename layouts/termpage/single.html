@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{- $key := .Params.sectionkey -}}
+{{- $section := "archives" -}}
+{{- if ne $key "main" }}{{ $section = $key }}{{ end -}}
+{{- $taxonomy := .Params.taxonomy -}}
+{{- $names := .Params.names -}}
+{{- $page := int (.Params.page | default 1) -}}
+{{- $total := int (.Params.totalpages | default 1) -}}
+{{- $pages := where site.RegularPages "Section" $section -}}
+{{- $pages = where $pages "Type" "not in" (slice "termpage" "listpage") -}}
+{{- $pages = where $pages (printf "Params.%s" $taxonomy) "intersect" $names -}}
+{{- $pages = $pages.ByDate.Reverse -}}
+{{- $start := mul (sub $page 1) 40 -}}
+{{- $items := first 40 (after $start $pages) -}}
+{{- range $items -}}
+	{{- partial "article-list-item.html" . -}}
+{{- end -}}
+{{- partial "term-pagination.html" (dict "key" $key "taxonomy" $taxonomy "slug" .Params.slug "page" $page "total" $total) -}}
+{{ end }}

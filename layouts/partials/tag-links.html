@@ -1,0 +1,17 @@
+{{- $key := partial "section-key.html" . -}}
+{{- $tagMap := index hugo.Data.terms $key "tags" -}}
+{{- if .Params.tags -}}
+<div class="post-bottom">
+	<div class="post-tags-pig">
+		{{- range $i, $t := .Params.tags -}}
+			{{- if $i }} {{ end -}}
+			{{- $slug := index $tagMap $t -}}
+			{{- if $slug -}}
+				<a href="{{ partial "term-url.html" (dict "key" $key "taxonomy" "tag" "slug" $slug) }}" rel="tag">{{ $t }}</a>
+			{{- else -}}
+				<span>{{ $t }}</span>
+			{{- end -}}
+		{{- end }}
+	</div>
+</div>
+{{- end -}}

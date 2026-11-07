@@ -1,0 +1,64 @@
+{{ define "main" }}
+{{- $key := partial "section-key.html" . -}}
+{{- $sec := index hugo.Data.sections $key -}}
+{{- $terms := index hugo.Data.terms $key -}}
+{{- $catMap := $terms.cats -}}
+<div class="entry clearfix breadcrumbs">
+	<a href="{{ $sec.home }}">{{ $sec.name }}</a>
+	{{- with index .Params.categories 0 }}
+		{{- $slug := index $catMap . }}
+		{{- if $slug }} &raquo; <a href="{{ partial "term-url.html" (dict "key" $key "taxonomy" "cat" "slug" $slug) }}" title="查看 {{ . }} 中的全部文章">{{ . }}</a>{{ end }}
+	{{- end }}
+	&raquo; <span>{{ .Title }}</span>
+</div>
+<div class="entry clearfix">
+	<h1><a class="post-title" href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a></h1>
+	<div class="post-meta">
+		{{ .Date.Format "2006年1月2日" }} |
+		分类:
+		{{- range $i, $c := .Params.categories -}}
+			{{- if $i }}、{{ end -}}
+			{{- $slug := index $catMap $c -}}
+			{{- if $slug -}}
+				<a href="{{ partial "term-url.html" (dict "key" $key "taxonomy" "cat" "slug" $slug) }}" title="{{ $c }}" rel="category tag">{{ $c }}</a>
+			{{- else -}}
+				{{ $c }}
+			{{- end -}}
+		{{- end }}
+	</div><!-- END post-meta -->
+	<div class="clear"></div>
+	<div class="entry-content">
+		{{ partial "post-logo.html" (dict "page" . "position" "top") }}
+		{{ .Content }}
+		{{ partial "post-logo.html" (dict "page" . "position" "bottom") }}
+	</div>
+	{{ partial "tag-links.html" . }}
+</div><!-- END entry -->
+<div class="entry clearfix authorinfo">
+	<nav class="nextprevious">
+		{{- with .NextInSection }}
+			{{- if and (ne .Type "termpage") (ne .Type "listpage") }}
+		<div class="next_content">下一篇 » <a href="{{ .RelPermalink }}" title="{{ .Title }}">{{ .Title }}</a></div>
+			{{- end }}
+		{{- end }}
+		{{- with .PrevInSection }}
+			{{- if and (ne .Type "termpage") (ne .Type "listpage") }}
+		<div class="previous_content">« 上一篇 <a href="{{ .RelPermalink }}" title="{{ .Title }}">{{ .Title }}</a></div>
+			{{- end }}
+		{{- end }}
+	</nav>
+	<div class="clear"></div>
+</div>
+{{- $sectionPages := partial "section-pages.html" . -}}
+{{- $related := first 5 ($sectionPages.Related .) -}}
+{{- if $related }}
+<div class="entry clearfix">
+	<h4>相关文章</h4>
+	<ul class="divComments related-posts">
+		{{- range $related }}
+		<li class="msgarticle"><a href="{{ .RelPermalink }}" title="{{ .Title }}">{{ .Title }}</a></li>
+		{{- end }}
+	</ul>
+</div>
+{{- end }}
+{{ end }}

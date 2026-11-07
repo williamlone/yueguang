@@ -1,0 +1,66 @@
+{{- $key := .key -}}
+{{- $ctx := .ctx -}}
+{{- $terms := index hugo.Data.terms $key -}}
+{{- $prefix := "" -}}
+{{- if ne $key "main" -}}{{- $prefix = printf "/%s" $key -}}{{- end -}}
+
+{{- /* 标签页，按 40 篇一页拆成多个页面 */ -}}
+{{- range $group := $terms.tag_pages -}}
+	{{- range $n := seq 1 $group.page_count -}}
+		{{- $path := cond (eq $n 1) (printf "tag/%s" $group.slug) (printf "tag/%s/page/%d" $group.slug $n) -}}
+		{{- $url := cond (eq $n 1) (printf "%s/tag/%s.html" $prefix $group.slug) (printf "%s/tag/%s/page/%d.html" $prefix $group.slug $n) -}}
+		{{- $ctx.AddPage (dict
+			"path" $path
+			"url" $url
+			"title" $group.title
+			"type" "termpage"
+			"params" (dict "sectionkey" $key "taxonomy" "tags" "slug" $group.slug "names" $group.names "termpage" true "page" $n "totalpages" $group.page_count)
+		) -}}
+	{{- end -}}
+{{- end -}}
+
+{{- /* 分类页 */ -}}
+{{- range $group := $terms.cat_pages -}}
+	{{- range $n := seq 1 $group.page_count -}}
+		{{- $path := cond (eq $n 1) (printf "cat/%s" $group.slug) (printf "cat/%s/page/%d" $group.slug $n) -}}
+		{{- $url := cond (eq $n 1) (printf "%s/cat/%s.html" $prefix $group.slug) (printf "%s/cat/%s/page/%d.html" $prefix $group.slug $n) -}}
+		{{- $ctx.AddPage (dict
+			"path" $path
+			"url" $url
+			"title" $group.title
+			"type" "termpage"
+			"params" (dict "sectionkey" $key "taxonomy" "categories" "slug" $group.slug "names" $group.names "termpage" true "page" $n "totalpages" $group.page_count)
+		) -}}
+	{{- end -}}
+{{- end -}}
+
+{{- /* 子分区的 /{section}/archives/ 归档首页（Hugo 不会为嵌套 archives 目录自动生成） */ -}}
+{{- if ne $key "main" -}}
+	{{- $ctx.AddPage (dict
+		"path" "_archives"
+		"url" (printf "/%s/archives/index.html" $key)
+		"title" "全部文章"
+		"type" "listpage"
+		"params" (dict "sectionkey" $key "base" (printf "/%s/archives" $key) "page" 1 "totalpages" $terms.list_page_count)
+	) -}}
+{{- end -}}
+
+{{- /* 分区首页与归档页的分页（第 1 页由 Hugo 的分区页提供） */ -}}
+{{- if gt $terms.list_page_count 1 -}}
+	{{- range $n := seq 2 $terms.list_page_count -}}
+		{{- $ctx.AddPage (dict
+			"path" (printf "page/%d" $n)
+			"url" (printf "%s/page/%d.html" $prefix $n)
+			"title" (printf "第%d页" $n)
+			"type" "listpage"
+			"params" (dict "sectionkey" $key "base" $prefix "page" $n "totalpages" $terms.list_page_count)
+		) -}}
+		{{- $ctx.AddPage (dict
+			"path" (printf "archives/page/%d" $n)
+			"url" (printf "%s/archives/page/%d.html" $prefix $n)
+			"title" (printf "第%d页" $n)
+			"type" "listpage"
+			"params" (dict "sectionkey" $key "base" (printf "%s/archives" $prefix) "page" $n "totalpages" $terms.list_page_count)
+		) -}}
+	{{- end -}}
+{{- end -}}

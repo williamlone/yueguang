@@ -1,0 +1,59 @@
+{{- $key := partial "section-key.html" . -}}
+{{- $terms := index hugo.Data.terms $key -}}
+{{- $search := hugo.Data.search -}}
+{{- $default := index (where $search.engines "id" $search.default) 0 -}}
+{{- if not $default }}{{ $default = index $search.engines 0 }}{{ end -}}
+{{- $action := index (split $default.url "?") 0 -}}
+<div id="sidebar" class="sidebar alpha omega">
+	<div class="sidebar-box clearfix">
+		<h4>搜索</h4>
+		<ul class="divSearchPanel">
+			<div>
+				<form method="get" action="{{ $action }}" id="siteSearchForm">
+					<input type="text" name="{{ $default.param }}" id="edtSearch" size="12" value="" placeholder="搜索本站" />
+					<input type="submit" value="提交" name="btnG" id="btnPost" />
+					<div class="search-engine-row">
+						<label for="searchEngine">搜索引擎</label>
+						<select id="searchEngine" aria-label="选择搜索引擎">
+							{{- range $search.engines }}
+							<option value="{{ .id }}"{{ if eq .id $default.id }} selected{{ end }}>{{ .name }}</option>
+							{{- end }}
+						</select>
+					</div>
+				</form>
+			</div>
+		</ul>
+		<script>window.SITE_SEARCH = {{ dict "default" $default.id "site" $search.site "engines" $search.engines | jsonify | safeJS }};</script>
+	</div>
+	<div class="sidebar-box clearfix">
+		<h4>网站分类</h4>
+		<ul class="divCatalog">
+			<ul>
+				{{- range $terms.cat_pages }}
+				<li class="li-cate"><a href="{{ partial "term-url.html" (dict "key" $key "taxonomy" "cat" "slug" .slug) }}">{{ .title }}</a></li>
+				{{- end }}
+			</ul>
+		</ul>
+	</div>
+	<div class="sidebar-box clearfix">
+		<h4>标签列表</h4>
+		<ul class="divTags">
+			<ul>
+				{{- range $terms.tag_pages }}
+				<li class="tag-name"><a href="{{ partial "term-url.html" (dict "key" $key "taxonomy" "tag" "slug" .slug) }}">{{ .title }}</a></li>
+				{{- end }}
+			</ul>
+		</ul>
+	</div>
+	<div class="sidebar-box clearfix">
+		<h4>网站收藏</h4>
+		<ul class="divFavorites">
+			<ul>
+				{{- range index hugo.Data.sections "order" -}}
+					{{- $item := index hugo.Data.sections . }}
+				<li><a href="{{ $item.home }}" target="_blank">{{ $item.name }}</a></li>
+				{{- end }}
+			</ul>
+		</ul>
+	</div>
+</div><!-- END sidebar -->
