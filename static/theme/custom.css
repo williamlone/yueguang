@@ -43,6 +43,17 @@
   font-size: 14px;
 }
 
+/* 列表条目首图（由分区配置 list_image 控制） */
+.list-image {
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.list-image img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* 相关文章列表 */
 .related-posts {
   margin-top: 10px;

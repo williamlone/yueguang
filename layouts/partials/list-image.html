@@ -1,0 +1,15 @@
+{{- /*
+  取文章正文里的第一张 Markdown 图片，供列表条目使用。
+  支持 ![alt](src)、![alt](src "title")、![alt](src 'title') 以及 gif。
+  地址交给 upload-url.html 处理（补 CDN 与分区前缀）。抓不到时什么都不输出。
+*/ -}}
+{{- $page := . -}}
+{{- $m := findRESubmatch `!\[([^\]]*)\]\(\s*([^)\s]+)(?:\s+["'][^"']*["'])?\s*\)` $page.RawContent 1 -}}
+{{- if $m -}}
+	{{- $groups := index $m 0 -}}
+	{{- $alt := index $groups 1 -}}
+	{{- $src := index $groups 2 -}}
+	{{- $src = partial "upload-url.html" (dict "destination" $src "page" $page) -}}
+	{{- if not $alt }}{{ $alt = $page.Title }}{{ end -}}
+<div class="list-image"><img src="{{ $src }}" alt="{{ $alt }}" loading="lazy"></div>
+{{- end -}}

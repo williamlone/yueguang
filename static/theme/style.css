@@ -745,6 +745,11 @@ a:focus > .sf-sub-indicator,a:hover > .sf-sub-indicator,a:active > .sf-sub-indic
 	position: relative
 }
 
+.entry img {
+	margin: 1em auto; 
+	display: block; 
+}
+
 .entry-content p {
 	margin: 0 0 1em
 }

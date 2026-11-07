@@ -1,5 +1,6 @@
 {{- $key := partial "section-key.html" . -}}
 {{- $catMap := index hugo.Data.terms $key "cats" -}}
+{{- $sec := index hugo.Data.sections $key -}}
 <div class="entry clearfix">
 	<h1><a class="post-title" href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a></h1>
 	<div class="post-meta">
@@ -17,6 +18,9 @@
 	</div>
 	<div class="clear"></div>
 	<div class="entry-content">
+		{{- if $sec.list_image }}
+		{{ partial "list-image.html" . }}
+		{{- end }}
 		{{ .Summary | plainify | htmlUnescape }}
 		<span class="readmore"><a href="{{ .RelPermalink }}">阅读全文...</a></span>
 	</div>

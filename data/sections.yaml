@@ -57,6 +57,7 @@ movie:
   name: 电影评论
   subtitle: 提供最新的电影介绍及评论
   home: /movie/
+  list_image: true      # 列表条目显示正文首图
   nav:
     - { label: 首页, url: /movie/ }
     - { label: 欧美电影, url: /movie/cat/us.html }
@@ -84,6 +85,7 @@ apps:
   name: 移动应用观察
   subtitle: iPhone、Android免费应用和经典软件推荐
   home: /apps/
+  list_image: true      # 列表条目显示正文首图
   nav:
     - { label: 首页, url: /apps/ }
     - { label: iPhone, url: /apps/tag/iPhone.html }
