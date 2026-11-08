@@ -127,3 +127,45 @@
   margin-top: 0;
 }
 
+/* 主站侧栏「订阅博客」区块：宽度自适应侧栏，二维码不裁剪 */
+.divSubscribe li {
+  height: auto;
+  width: auto;
+  overflow: visible;
+  margin-bottom: 0;
+  line-height: 2;
+}
+
+.divSubscribe li img {
+  vertical-align: middle;
+}
+
+.divSubscribe .subscribe-qr {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.divSubscribe .subscribe-qr img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 4px;
+}
+
+.divSubscribe .subscribe-qr-text {
+  margin: 0;
+  color: #999;
+  font-size: 0.875em;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 主站侧栏「推荐博客」：两个链接并排，宽度自适应侧栏 */
+.divLinkage li {
+  width: 48%;
+  height: auto;
+  margin-right: 0;
+  padding: 0;
+  line-height: 2;
+}
+

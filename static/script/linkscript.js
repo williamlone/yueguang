@@ -1,0 +1,1 @@
+﻿document.currentScript.insertAdjacentHTML('afterEnd','<li><a rel="nofollow" href="https://www.seozac.com/" target=_blank>SEO每天一贴</a> </li><li><a rel="nofollow" href="http://seo.g2soft.net/" target=_blank>SEO网站优化 </a> </li>'); 
