@@ -43,6 +43,29 @@
   font-size: 14px;
 }
 
+/* 分页：页码折叠，不换行，横向溢出时滚动而不是挤到第二行 */
+.pagination {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 6px 0;
+}
+
+.pagination a,
+.pagination span {
+  display: inline-block;
+  float: none;
+  vertical-align: top;
+}
+
+.pagination span.page-dots {
+  width: auto;
+  padding: 0 4px;
+  color: var(--text-color);
+  background: transparent;
+  box-shadow: none;
+}
+
 /* 列表条目首图（由分区配置 list_image 控制） */
 .list-image {
   margin: 0 0 10px;

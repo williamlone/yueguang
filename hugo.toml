@@ -21,6 +21,8 @@ disablePathToLower = true
   description = '月光博客，是专注于业界、互联网、搜索引擎优化、社会化网络、IT技术、谷歌地图、建站、软件等领域的原创IT科技博客，作者龙威廉。'
   keywords = '月光,博客,月光博客,科技博客,IT博客,谷歌地图,谷歌地球'
   image_cdn = 'https://static.williamlong.info'
+  # 分页页码折叠：当前页左右各显示多少个页码
+  pagerWindow = 4
 
 [markup]
   [markup.goldmark.renderer]
