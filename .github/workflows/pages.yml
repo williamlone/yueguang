@@ -1,0 +1,62 @@
+# 构建并发布到 GitHub Pages（GitHub Actions 发布，不使用 gh-pages 分支）
+#
+# 首次使用前：
+#   1) 仓库 Settings -> Pages -> Build and deployment -> Source 选择 "GitHub Actions"
+#   2) 仓库 Settings -> Secrets and variables -> Actions -> Variables 新建仓库变量 SITE_BASEURL
+#      A. 预览（项目子路径）：https://williamlone.github.io/yueguang/   ← 必须带结尾斜杠
+#      B. 正式域名（根目录）：https://www.example.com/                  ← 换成实际域名，同样带结尾斜杠
+#   3) 切正式域名时还需要：
+#      - 在 static/CNAME 写入域名（构建后进入 public/CNAME），并在 Pages 设置里填同一个 Custom domain
+#      - 配置 DNS：根域加 4 条 A 记录指向 GitHub Pages，www 子域 CNAME 指向 williamlone.github.io
+#      - DNS 生效后在 Pages 设置勾选 Enforce HTTPS
+#   注意：A 预览是项目子路径（/yueguang/），模板已用 relURL 适配子路径，可直接访问；正文里的同域绝对地址仍会跳正式站。
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只允许一个 Pages 发布，避免并发任务互相覆盖
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.165.0'
+          extended: true
+
+      - name: Build site
+        # SITE_BASEURL 来自仓库变量，必须先在 Settings -> Variables 里配置（带结尾斜杠）
+        run: hugo --logLevel warn --baseURL "${{ vars.SITE_BASEURL }}"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

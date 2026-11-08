@@ -14,18 +14,18 @@
 {{- if and .IsPage (not $isListPage) -}}
 	{{- $desc = .Summary | plainify | truncate 120 -}}
 {{- end -}}
-{{- $rss := "/rss.xml" -}}
-{{- if ne $key "main" }}{{ $rss = printf "/%s/rss.xml" $key }}{{ end -}}
+{{- $rss := relURL "rss.xml" -}}
+{{- if ne $key "main" }}{{ $rss = relURL (printf "%s/rss.xml" $key) }}{{ end -}}
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="applicable-device" content="pc,mobile">
-	<link rel="icon" href="/images/favicon.ico">
-	<link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon.png">
-	<link rel="stylesheet" type="text/css" media="all" href="/theme/style.css">
-	<link rel="stylesheet" type="text/css" media="all" href="/theme/custom.css">
+	<link rel="icon" href="{{ relURL "images/favicon.ico" }}">
+	<link rel="apple-touch-icon-precomposed" href="{{ relURL "images/apple-touch-icon.png" }}">
+	<link rel="stylesheet" type="text/css" media="all" href="{{ relURL "theme/style.css" }}">
+	<link rel="stylesheet" type="text/css" media="all" href="{{ relURL "theme/custom.css" }}">
 	<title>{{ $title }}</title>
 	<meta name="description" content="{{ $desc }}">
 	<meta name="keywords" content="{{ site.Params.keywords }}">
@@ -43,6 +43,6 @@
 	</div><!-- END container -->
 </div><!-- END wrap -->
 {{ partial "footer.html" . }}
-<script src="/theme/search.js" defer></script>
+<script src="{{ relURL "theme/search.js" }}" defer></script>
 </body>
 </html>

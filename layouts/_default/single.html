@@ -4,7 +4,7 @@
 {{- $terms := index hugo.Data.terms $key -}}
 {{- $catMap := $terms.cats -}}
 <div class="entry clearfix breadcrumbs">
-	<a href="{{ $sec.home }}">{{ $sec.name }}</a>
+	<a href="{{ partial "site-url.html" $sec.home }}">{{ $sec.name }}</a>
 	{{- with index .Params.categories 0 }}
 		{{- $slug := index $catMap . }}
 		{{- if $slug }} &raquo; <a href="{{ partial "term-url.html" (dict "key" $key "taxonomy" "cat" "slug" $slug) }}" title="查看 {{ . }} 中的全部文章">{{ . }}</a>{{ end }}
@@ -29,7 +29,7 @@
 	<div class="clear"></div>
 	<div class="entry-content">
 		{{ partial "post-logo.html" (dict "page" . "position" "top") }}
-		{{ .Content }}
+		{{ .Content | partial "content-urls.html" }}
 		{{ partial "post-logo.html" (dict "page" . "position" "bottom") }}
 	</div>
 	{{ partial "tag-links.html" . }}

@@ -16,10 +16,10 @@
 	{{- if gt $page 1 }}
 		{{- $prev := printf "%s.html" $stem -}}
 		{{- if gt $page 2 }}{{ $prev = printf "%s/page/%d.html" $stem (sub $page 1) }}{{ end }}
-	<a class="prev page-numbers" href="{{ $prev }}">上一页</a>
+	<a class="prev page-numbers" href="{{ partial "site-url.html" $prev }}">上一页</a>
 	{{- end }}
 	{{- if gt $start 1 }}
-	<a class="page-numbers" href="{{ $stem }}.html">1</a>
+	<a class="page-numbers" href="{{ partial "site-url.html" (printf "%s.html" $stem) }}">1</a>
 		{{- if gt $start 2 }}
 	<span class="page-dots">…</span>
 		{{- end }}
@@ -30,16 +30,16 @@
 		{{- else }}
 			{{- $url := printf "%s.html" $stem }}
 			{{- if gt $n 1 }}{{ $url = printf "%s/page/%d.html" $stem $n }}{{ end }}
-	<a class="page-numbers" href="{{ $url }}">{{ $n }}</a>
+	<a class="page-numbers" href="{{ partial "site-url.html" $url }}">{{ $n }}</a>
 		{{- end }}
 	{{- end }}
 	{{- if lt $end $total }}
 	<span class="page-dots">…</span>
-	<a class="page-numbers" href="{{ printf "%s/page/%d.html" $stem $total }}">{{ $total }}</a>
+	<a class="page-numbers" href="{{ partial "site-url.html" (printf "%s/page/%d.html" $stem $total) }}">{{ $total }}</a>
 	{{- end }}
 	{{- if lt $page $total }}
 		{{- $next := printf "%s/page/%d.html" $stem (add $page 1) }}
-	<a class="next page-numbers" href="{{ $next }}">下一页</a>
+	<a class="next page-numbers" href="{{ partial "site-url.html" $next }}">下一页</a>
 	{{- end }}
 </div>
 {{- end -}}

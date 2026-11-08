@@ -1,2 +1,6 @@
 {{- $dest := partial "upload-url.html" (dict "destination" .Destination "page" .Page) -}}
+{{- /* upload 地址已是 CDN 绝对地址；其余站内根相对路径补 baseURL 子路径（如 /yueguang/）。 */ -}}
+{{- if and (hasPrefix $dest "/") (not (hasPrefix $dest "//")) -}}
+	{{- $dest = partial "site-url.html" $dest -}}
+{{- end -}}
 <a href="{{ $dest }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>

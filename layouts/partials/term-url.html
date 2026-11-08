@@ -2,4 +2,4 @@
 {{- if ne .key "main" -}}
   {{- $prefix = printf "/%s" .key -}}
 {{- end -}}
-{{- return (printf "%s/%s/%s.html" $prefix .taxonomy .slug) -}}
+{{- relURL (strings.TrimPrefix "/" (printf "%s/%s/%s.html" $prefix .taxonomy .slug)) -}}

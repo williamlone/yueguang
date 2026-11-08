@@ -1,2 +1,5 @@
 {{- $dest := partial "upload-url.html" (dict "destination" .Destination "page" .Page) -}}
+{{- if and (hasPrefix $dest "/") (not (hasPrefix $dest "//")) -}}
+	{{- $dest = partial "site-url.html" $dest -}}
+{{- end -}}
 <img src="{{ $dest }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }}>

@@ -17,9 +17,9 @@
 			{{- if eq $position "top" }}{{ $ext = "gif" }}{{ end -}}
 			{{- if os.FileExists (printf "static/logo/%s.%s" $slug $ext) -}}
 				{{- if eq $position "top" }}
-<a href="{{ partial "term-url.html" (dict "key" "main" "taxonomy" "tag" "slug" $slug) }}" rel="tag"><img src="/logo/{{ $slug }}.gif" alt="{{ $name }}" class="thumb" width="80" height="80" /></a>
+<a href="{{ partial "term-url.html" (dict "key" "main" "taxonomy" "tag" "slug" $slug) }}" rel="tag"><img src="{{ relURL (printf "logo/%s.gif" $slug) }}" alt="{{ $name }}" class="thumb" width="80" height="80" /></a>
 				{{- else }}
-<p style="text-align:center"><img src="/logo/{{ $slug }}.jpg" alt="{{ $name }}"></p>
+<p style="text-align:center"><img src="{{ relURL (printf "logo/%s.jpg" $slug) }}" alt="{{ $name }}"></p>
 				{{- end -}}
 			{{- end -}}
 		{{- end -}}

@@ -51,7 +51,7 @@
 			<ul>
 				{{- range index hugo.Data.sections "order" -}}
 					{{- $item := index hugo.Data.sections . }}
-				<li><a href="{{ $item.home }}" target="_blank">{{ $item.name }}</a></li>
+				<li><a href="{{ partial "site-url.html" $item.home }}" target="_blank">{{ $item.name }}</a></li>
 				{{- end }}
 			</ul>
 		</ul>

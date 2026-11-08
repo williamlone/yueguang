@@ -2,10 +2,10 @@
 	<div id="copyright" class="container">
 		<ul>
 			<li>
-				<a href="/archives/1.html">联系我们</a>
+				<a href="{{ relURL "archives/1.html" }}">联系我们</a>
 				{{- range index hugo.Data.sections "order" -}}
 					{{- $item := index hugo.Data.sections . -}}
-					{{- if ne . "main" }} ┊ <a href="{{ $item.home }}" target="_blank">{{ $item.name }}</a>{{ end -}}
+					{{- if ne . "main" }} ┊ <a href="{{ partial "site-url.html" $item.home }}" target="_blank">{{ $item.name }}</a>{{ end -}}
 				{{- end }}
 			</li>
 		</ul>

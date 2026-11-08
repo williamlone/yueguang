@@ -11,11 +11,11 @@
 	{{- if gt $page 1 }}
 		{{- $prev := printf "%s/page/%d.html" $base (sub $page 1) }}
 		{{- if eq (sub $page 1) 1 }}{{ $prev = cond (eq $base "") "/" (printf "%s/" $base) }}{{ end }}
-	<a class="prev page-numbers" href="{{ $prev }}">上一页</a>
+	<a class="prev page-numbers" href="{{ partial "site-url.html" $prev }}">上一页</a>
 	{{- end }}
 	{{- if gt $start 1 }}
 		{{- $first := cond (eq $base "") "/" (printf "%s/" $base) }}
-	<a class="page-numbers" href="{{ $first }}">1</a>
+	<a class="page-numbers" href="{{ partial "site-url.html" $first }}">1</a>
 		{{- if gt $start 2 }}
 	<span class="page-dots">…</span>
 		{{- end }}
@@ -26,15 +26,15 @@
 		{{- else }}
 			{{- $url := printf "%s/page/%d.html" $base $n }}
 			{{- if eq $n 1 }}{{ $url = cond (eq $base "") "/" (printf "%s/" $base) }}{{ end }}
-	<a class="page-numbers" href="{{ $url }}">{{ $n }}</a>
+	<a class="page-numbers" href="{{ partial "site-url.html" $url }}">{{ $n }}</a>
 		{{- end }}
 	{{- end }}
 	{{- if lt $end $total }}
 	<span class="page-dots">…</span>
-	<a class="page-numbers" href="{{ printf "%s/page/%d.html" $base $total }}">{{ $total }}</a>
+	<a class="page-numbers" href="{{ partial "site-url.html" (printf "%s/page/%d.html" $base $total) }}">{{ $total }}</a>
 	{{- end }}
 	{{- if lt $page $total }}
-	<a class="next page-numbers" href="{{ printf "%s/page/%d.html" $base (add $page 1) }}">下一页</a>
+	<a class="next page-numbers" href="{{ partial "site-url.html" (printf "%s/page/%d.html" $base (add $page 1)) }}">下一页</a>
 	{{- end }}
 </div>
 {{- end -}}

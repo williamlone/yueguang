@@ -1,0 +1,9 @@
+{{- /* 把站内根相对路径转成带 baseURL 子路径的地址；外链、协议相对地址、锚点原样返回。 */ -}}
+{{- $u := . -}}
+{{- if or (hasPrefix $u "http://") (hasPrefix $u "https://") (hasPrefix $u "//") (hasPrefix $u "#") (hasPrefix $u "mailto:") (hasPrefix $u "tel:") (hasPrefix $u "javascript:") -}}
+{{- $u -}}
+{{- else if eq $u "/" -}}
+{{- site.Home.RelPermalink -}}
+{{- else -}}
+{{- relURL (strings.TrimPrefix "/" $u) -}}
+{{- end -}}

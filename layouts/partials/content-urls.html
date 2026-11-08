@@ -1,0 +1,13 @@
+{{- /* 处理正文里的原始 HTML（Markdown 渲染钩子覆盖不到的部分）：
+       把 href/src 的站内根相对地址补上 baseURL 子路径。
+       根目录部署（baseURL 路径为 "/"）时原样返回，保证输出不变。 */ -}}
+{{- $c := . -}}
+{{- $base := (urls.Parse site.BaseURL).Path -}}
+{{- if ne $base "/" -}}
+	{{- $seg := strings.TrimPrefix "/" $base -}}
+	{{- $ph := "@@SITE_BASE_PLACEHOLDER@@" -}}
+	{{- $c = replaceRE (printf `(href|src)="/%s` $seg) (printf `${1}="%s` $ph) $c -}}
+	{{- $c = replaceRE `(href|src)="/([^/"]+)` (printf `${1}="/%s${2}` $seg) $c -}}
+	{{- $c = replace $c $ph (printf "/%s" $seg) -}}
+{{- end -}}
+{{- $c | safeHTML -}}
