@@ -31,7 +31,7 @@
   padding: 0;
   background: transparent;
   font-family: Consolas, Monaco, "Courier New", monospace;
-  font-size: 14px;
+  font-size: 0.875em;
 }
 
 .entry-content :not(pre) > code {
@@ -40,7 +40,7 @@
   padding: 2px 5px;
   background: #f1f1f1;
   font-family: Consolas, Monaco, "Courier New", monospace;
-  font-size: 14px;
+  font-size: 0.875em;
 }
 
 /* 分页：页码折叠，不换行，横向溢出时滚动而不是挤到第二行 */
@@ -85,7 +85,7 @@
 
 .entry-content .post-tags-pig {
   margin: 0;
-  font-size: 12px;
+  font-size: 0.875em;
   line-height: 1;
 }
 
@@ -98,7 +98,7 @@
   color: #717171;
   background: #e8e8e8;
   border-radius: 2px;
-  font-size: 12px;
+  font-size: 1em;
   line-height: 18px;
 }
 

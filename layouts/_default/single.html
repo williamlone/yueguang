@@ -15,7 +15,7 @@
 	<h1><a class="post-title" href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a></h1>
 	<div class="post-meta">
 		{{ .Date.Format "2006年1月2日" }} |
-		分类:
+		分类：
 		{{- range $i, $c := .Params.categories -}}
 			{{- if $i }}、{{ end -}}
 			{{- $slug := index $catMap $c -}}
