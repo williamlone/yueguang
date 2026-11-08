@@ -23,6 +23,8 @@ disablePathToLower = true
   image_cdn = 'https://static.williamlong.info'
   # 分页页码折叠：当前页左右各显示多少个页码
   pagerWindow = 4
+  # 文章页「相关文章」数量，六个分区共用
+  relatedCount = 12
 
 [markup]
   [markup.goldmark.renderer]

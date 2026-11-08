@@ -169,3 +169,63 @@
   line-height: 2;
 }
 
+/* 相关文章：movie / apps / google 使用四列图片网格 */
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px 14px;
+}
+
+.related-card {
+  display: block;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.related-card .list-image {
+  margin: 0 0 6px;
+}
+
+.related-card .list-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* 覆盖主题 #main img 的 95% 宽和 5px 内边距，保证四列等宽不溢出 */
+#main .related-grid .list-image img {
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+}
+
+.related-card-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  height: 3em;
+  font-size: 0.875em;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.related-card:hover {
+  color: #64A7BF;
+}
+
+@media (max-width: 768px) {
+  .related-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 页脚版权行（由 script/footer.js 输出）：位于 #copyright 的 li 内，单独成行 */
+#BlogPowerBy {
+  margin-top: 4px;
+  font-size: 1em;
+}
+

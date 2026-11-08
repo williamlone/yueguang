@@ -2,11 +2,12 @@
 	<div id="copyright" class="container">
 		<ul>
 			<li>
-				<a href="{{ relURL "archives/1.html" }}">联系我们</a>
+				<a href="{{ relURL "archives/1.html" }}">关于我们</a>
 				{{- range index hugo.Data.sections "order" -}}
 					{{- $item := index hugo.Data.sections . -}}
 					{{- if ne . "main" }} ┊ <a href="{{ partial "site-url.html" $item.home }}" target="_blank">{{ $item.name }}</a>{{ end -}}
 				{{- end }}
+			<div id="BlogPowerBy"><script type="text/javascript" src="{{ relURL "script/footer.js" }}"></script></div>
 			</li>
 		</ul>
 	</div><!-- END copyright-->

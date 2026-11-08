@@ -50,15 +50,28 @@
 	<div class="clear"></div>
 </div>
 {{- $sectionPages := partial "section-pages.html" . -}}
-{{- $related := first 5 ($sectionPages.Related .) -}}
+{{- $limit := site.Params.relatedCount | default 12 -}}
+{{- $related := first $limit ($sectionPages.Related .) -}}
 {{- if $related }}
 <div class="entry clearfix">
-	<h4>相关文章</h4>
+	{{- $relatedTitles := dict "movie" "相关电影" "apps" "相关应用" "google" "相关地图" }}
+	<h4>{{ index $relatedTitles $key | default "相关文章" }}</h4>
+	{{- if in (slice "movie" "apps" "google") $key }}
+	<div class="related-grid">
+		{{- range $related }}
+		<a class="related-card" href="{{ .RelPermalink }}" title="{{ .Title }}">
+			{{ partial "list-image.html" . }}
+			<span class="related-card-title">{{ .Title }}</span>
+		</a>
+		{{- end }}
+	</div>
+	{{- else }}
 	<ul class="divComments related-posts">
 		{{- range $related }}
 		<li class="msgarticle"><a href="{{ .RelPermalink }}" title="{{ .Title }}">{{ .Title }}</a></li>
 		{{- end }}
 	</ul>
+	{{- end }}
 </div>
 {{- end }}
 {{ end }}
