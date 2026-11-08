@@ -1,4 +1,4 @@
-# 构建并发布到 GitHub Pages（GitHub Actions 发布，不使用 gh-pages 分支）
+# 构建并发布到 GitHub Pages / 自有服务器（GitHub Actions 发布，不使用 gh-pages 分支）
 #
 # 首次使用前：
 #   1) 仓库 Settings -> Pages -> Build and deployment -> Source 选择 "GitHub Actions"
@@ -10,6 +10,14 @@
 #      - 配置 DNS：根域加 4 条 A 记录指向 GitHub Pages，www 子域 CNAME 指向 williamlone.github.io
 #      - DNS 生效后在 Pages 设置勾选 Enforce HTTPS
 #   注意：A 预览是项目子路径（/yueguang/），模板已用 relURL 适配子路径，可直接访问；正文里的同域绝对地址仍会跳正式站。
+#
+# 部署目标（可选）：
+#   - 仓库变量 DEPLOY_TARGET：github（默认）| server | both，push 到 main 时按它决定部署到哪
+#   - 手动运行（workflow_dispatch）时可临时选择 github / server / both，
+#     未传值时同样回退到 DEPLOY_TARGET，再回退到 github
+#   - 选择 server / both 时需要在 Secrets 里配置：
+#       SSH_HOST、SSH_USER、SSH_PORT、SSH_KEY、DEPLOY_PATH
+#     缺任意一个都会让服务器部署 job 明确失败并报出缺少的 secret 名
 
 name: Deploy to GitHub Pages
 
@@ -17,13 +25,22 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      target:
+        description: '部署目标'
+        type: choice
+        options:
+          - github
+          - server
+          - both
+        default: github
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 同一时间只允许一个 Pages 发布，避免并发任务互相覆盖
+# 同一时间只允许一个发布，避免并发任务互相覆盖
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -45,6 +62,7 @@ jobs:
         # SITE_BASEURL 来自仓库变量，必须先在 Settings -> Variables 里配置（带结尾斜杠）
         run: hugo --logLevel warn --baseURL "${{ vars.SITE_BASEURL }}"
 
+      # 构建产物只上传一次，两个部署 job 共用
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -52,6 +70,7 @@ jobs:
 
   deploy:
     needs: build
+    if: ${{ (inputs.target || vars.DEPLOY_TARGET || 'github') != 'server' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -60,3 +79,56 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy-server:
+    needs: build
+    if: ${{ (inputs.target || vars.DEPLOY_TARGET || 'github') != 'github' }}
+    runs-on: ubuntu-latest
+    # 只保留读代码权限，不继承 Pages 发布所需的 pages / id-token
+    permissions:
+      contents: read
+    steps:
+      - name: Check required secrets
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          missing=0
+          for name in SSH_HOST SSH_USER SSH_PORT SSH_KEY DEPLOY_PATH; do
+            if [ -z "${!name}" ]; then
+              echo "::error::缺少 secret：$name（选择 server/both 时必须配置）"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::服务器部署所需 secrets 不完整，已中止，未做任何远端修改。"
+            exit 1
+          fi
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: ./artifact
+
+      - name: Extract artifact
+        run: |
+          mkdir -p ./site
+          tar -xf ./artifact/artifact.tar -C ./site
+          ls -A ./site | head -n 20
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: |
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }}" \
+            ./site/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/"
