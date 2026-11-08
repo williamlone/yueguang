@@ -77,6 +77,41 @@
   height: auto;
 }
 
+/* 列表条目内的标签（由分区配置 list_tags 控制） */
+.entry-content .post-bottom {
+  margin-top: 8px;
+  overflow: visible;
+}
+
+.entry-content .post-tags-pig {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.entry-content .post-tags-pig a,
+.entry-content .post-tags-pig span {
+  float: none;
+  display: inline-block;
+  margin: 0 4px 4px 0;
+  padding: 2px 6px;
+  color: #717171;
+  background: #e8e8e8;
+  border-radius: 2px;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.entry-content .post-tags-pig span {
+  color: #aaa;
+}
+
+.entry-content .post-tags-pig a:hover {
+  color: #fff;
+  background: #424242;
+  text-decoration: none;
+}
+
 /* 相关文章列表 */
 .related-posts {
   margin-top: 10px;

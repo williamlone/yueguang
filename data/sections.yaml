@@ -45,6 +45,8 @@ google:
   name: 谷歌地图观察
   subtitle: Google Earth卫星地图下载,坐标等
   home: /google/
+  list_image: true      # 列表条目显示正文首图
+  list_tags: true       # 列表条目显示标签链接
   nav:
     - { label: 首页, url: /google/ }
     - { label: 世界奇趣, url: /google/cat/fun.html }
@@ -58,6 +60,7 @@ movie:
   subtitle: 提供最新的电影介绍及评论
   home: /movie/
   list_image: true      # 列表条目显示正文首图
+  list_tags: true       # 列表条目显示标签链接
   nav:
     - { label: 首页, url: /movie/ }
     - { label: 欧美电影, url: /movie/cat/us.html }
@@ -86,6 +89,7 @@ apps:
   subtitle: iPhone、Android免费应用和经典软件推荐
   home: /apps/
   list_image: true      # 列表条目显示正文首图
+  list_tags: true       # 列表条目显示标签链接
   nav:
     - { label: 首页, url: /apps/ }
     - { label: iPhone, url: /apps/tag/iPhone.html }

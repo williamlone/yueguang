@@ -23,5 +23,8 @@
 		{{- end }}
 		{{ .Summary | plainify | htmlUnescape }}
 		<span class="readmore"><a href="{{ .RelPermalink }}">阅读全文...</a></span>
+		{{- if $sec.list_tags }}
+		{{ partial "tag-links.html" . }}
+		{{- end }}
 	</div>
 </div>
