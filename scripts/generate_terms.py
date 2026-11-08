@@ -7,6 +7,8 @@ generate_terms.py —— 生成 Hugo 用的分区词条映射 data/terms.json
        得到「中文词条 -> 英文 slug」的映射（保留原始大小写）。
     2. 扫描 content 下六个分区的 md 文件，只保留实际用到的中文词条。
     3. 输出 data/terms.json，供模板和 content/_content.gotmpl 使用。
+       词条顺序与数据库一致：分类按 cate_ID 升序，标签按 tag_ID 升序，
+       并额外输出 tag_order / cat_order 两个名称数组，模板可直接按序遍历。
 
 运行：
     python scripts/generate_terms.py
@@ -40,7 +42,7 @@ SECTIONS = {
 
 
 def read_db_rows(db_path):
-    """返回 (tag 行, 分类行)，每行是 (中文名, slug)，按数据库 ID 排序。"""
+    """返回 (tag 行, 分类行)，每行是 (ID, 中文名, slug)，按数据库 ID 升序。"""
     conn = pyodbc.connect(
         "Driver={%s};DBQ=%s;" % (ODBC_DRIVER, os.path.abspath(db_path))
     )
@@ -49,14 +51,14 @@ def read_db_rows(db_path):
     def rows(sql):
         result = []
         for row in cur.execute(sql):
-            name = (row[0] or "").strip()
-            slug = (row[1] or "").strip()
+            name = (row[1] or "").strip()
+            slug = (row[2] or "").strip()
             if name and slug:
-                result.append((name, slug))
+                result.append((row[0], name, slug))
         return result
 
-    tags = rows("SELECT tag_Name, tag_URL FROM blog_Tag ORDER BY tag_ID")
-    cats = rows("SELECT cate_Name, cate_Url FROM blog_Category ORDER BY cate_ID")
+    tags = rows("SELECT tag_ID, tag_Name, tag_URL FROM blog_Tag ORDER BY tag_ID")
+    cats = rows("SELECT cate_ID, cate_Name, cate_Url FROM blog_Category ORDER BY cate_ID")
     conn.close()
     return tags, cats
 
@@ -105,22 +107,24 @@ def build_terms(used, db_rows, kind, articles, index, page_size=40):
     groups = {}
     canonical = {}
     titles = {}
-    for name, slug in db_rows:
+    ordered_slugs = []
+    for row_id, name, slug in db_rows:
         canonical.setdefault(name, slug)
         titles.setdefault(slug, name)
 
     missing = []
-    for name, slug in db_rows:
+    for row_id, name, slug in db_rows:
         if name in used:
-            group = groups.setdefault(
-                slug, {"slug": slug, "title": titles[slug], "names": []}
-            )
-            if name not in group["names"]:
-                group["names"].append(name)
+            if slug not in groups:
+                groups[slug] = {"slug": slug, "title": titles[slug], "names": []}
+                ordered_slugs.append(slug)
+            if name not in groups[slug]["names"]:
+                groups[slug]["names"].append(name)
     for name in sorted(used):
         if name not in canonical:
             missing.append(name)
             groups[name] = {"slug": name, "title": name, "names": [name]}
+            ordered_slugs.append(name)
 
     if missing:
         print("  ! %s 中有 %d 个词条在数据库里找不到 slug：%s" % (kind, len(missing), "、".join(missing)))
@@ -135,7 +139,7 @@ def build_terms(used, db_rows, kind, articles, index, page_size=40):
     for group in groups.values():
         for name in group["names"]:
             name_map[name] = group["slug"]
-    pages = sorted(groups.values(), key=lambda g: g["title"])
+    pages = [groups[slug] for slug in ordered_slugs]
     return name_map, pages
 
 
@@ -157,8 +161,10 @@ def main():
             "list_page_count": max(1, (len(articles) + 39) // 40),
             "tags": tags,
             "tag_pages": tag_pages,
+            "tag_order": [g["title"] for g in tag_pages],
             "cats": cats,
             "cat_pages": cat_pages,
+            "cat_order": [g["title"] for g in cat_pages],
         }
         print("   tag %d 个（页面 %d 个），分类 %d 个" % (len(tags), len(tag_pages), len(cats)))
 
