@@ -1,0 +1,356 @@
+# Pages CMS 配置（https://pagescms.org）
+# 放在仓库根目录，app.pagescms.org 接入本仓库后读取此文件生成编辑界面。
+#
+# 站点结构：六个分区各自把文章放在 content/{section}/archives/，
+# 文件名是纯数字（与 front matter 的 slug 一致）。站点没有配置 permalinks，
+# 文章 URL 直接由文件名决定（如 content/archives/1000.md -> /archives/1000.html），
+# 所以新建文章时文件名必须保持纯数字，且在同一分区内不重复。
+#
+# 正文图片走外部 CDN（https://static.williamlong.info/...），不在本仓库；
+# media 只开放仓库里实际存在的两个静态资源目录。
+
+media:
+  - name: logo
+    label: 标签配图（static/logo）
+    input: static/logo
+    output: /logo
+    extensions: [gif, jpg]
+  - name: images
+    label: 站点图标（static/images）
+    input: static/images
+    output: /images
+    extensions: [png, ico, gif]
+
+# 文章字段（六个分区完全一致，只有 path/label 不同）：
+#   title       string  必填，纯文本标题
+#   date        date    必填，输出 2011-02-01T09:21:22+08:00
+#   slug        string  必填，纯数字，同时决定文件名与 URL
+#   draft       boolean 必填，false 才发布
+#   categories  string  必填，list，中文分类名
+#   tags        string  选填，list，中文标签名
+#   body        rich-text，Markdown 正文
+
+content:
+  # ---------- 主站 / 月光博客 ----------
+  - name: main
+    label: 主站 · 月光博客
+    type: collection
+    path: content/archives
+    format: yaml-frontmatter
+    filename: "{fields.slug}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+        description: 纯文本，不要带引号或 HTML。
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ssxxx"
+        description: 与现有文章一致，写作 2011-02-01T09:21:22+08:00。
+      - name: slug
+        label: 编号（= 文件名 = URL）
+        type: string
+        required: true
+        pattern:
+          regex: "^[0-9]+$"
+          message: 只能填数字，并与本分区已有文章不重复
+        description: 新建时填本分区下一个数字（主站当前最大 999，下一条用 1000）；已有文章不要改，否则文件名和 URL 都会变。
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+        description: false 才会出现在列表和 RSS 中。
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+        required: true
+        description: 填中文分类名（如「网络日志」），与现有文章一致，不要填英文 slug。
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        description: 填中文标签名（如「公告」），可留空；标签页由构建时生成。
+      - name: body
+        label: 正文
+        type: rich-text
+        description: Markdown 正文。图片继续用 https://static.williamlong.info/upload/... 的 CDN 地址，不要换成仓库内图片。
+
+  # ---------- 月光微博客 ----------
+  - name: weibo
+    label: 月光微博客
+    type: collection
+    path: content/weibo/archives
+    format: yaml-frontmatter
+    filename: "{fields.slug}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+        description: 纯文本，不要带引号或 HTML。
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ssxxx"
+        description: 与现有文章一致，写作 2011-02-01T09:21:22+08:00。
+      - name: slug
+        label: 编号（= 文件名 = URL）
+        type: string
+        required: true
+        pattern:
+          regex: "^[0-9]+$"
+          message: 只能填数字，并与本分区已有文章不重复
+        description: 新建时填本分区下一个数字；已有文章不要改，否则文件名和 URL 都会变。
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+        description: false 才会出现在列表和 RSS 中。
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+        required: true
+        description: 填中文分类名（如「微网络」），与现有文章一致，不要填英文 slug。
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        description: 填中文标签名（如「博客」），可留空；标签页由构建时生成。
+      - name: body
+        label: 正文
+        type: rich-text
+        description: Markdown 正文。图片继续用 https://static.williamlong.info/upload/... 的 CDN 地址，不要换成仓库内图片。
+
+  # ---------- 谷歌地图观察 ----------
+  - name: google
+    label: 谷歌地图观察
+    type: collection
+    path: content/google/archives
+    format: yaml-frontmatter
+    filename: "{fields.slug}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+        description: 纯文本，不要带引号或 HTML。
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ssxxx"
+        description: 与现有文章一致，写作 2011-02-01T09:21:22+08:00。
+      - name: slug
+        label: 编号（= 文件名 = URL）
+        type: string
+        required: true
+        pattern:
+          regex: "^[0-9]+$"
+          message: 只能填数字，并与本分区已有文章不重复
+        description: 新建时填本分区下一个数字；已有文章不要改，否则文件名和 URL 都会变。
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+        description: false 才会出现在列表和 RSS 中。
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+        required: true
+        description: 填中文分类名，与现有文章一致，不要填英文 slug。
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        description: 填中文标签名，可留空；标签页由构建时生成。
+      - name: body
+        label: 正文
+        type: rich-text
+        description: Markdown 正文。图片继续用 https://static.williamlong.info/upload/... 的 CDN 地址，不要换成仓库内图片。
+
+  # ---------- 电影评论 ----------
+  - name: movie
+    label: 电影评论
+    type: collection
+    path: content/movie/archives
+    format: yaml-frontmatter
+    filename: "{fields.slug}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+        description: 纯文本，不要带引号或 HTML。
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ssxxx"
+        description: 与现有文章一致，写作 2011-02-01T09:21:22+08:00。
+      - name: slug
+        label: 编号（= 文件名 = URL）
+        type: string
+        required: true
+        pattern:
+          regex: "^[0-9]+$"
+          message: 只能填数字，并与本分区已有文章不重复
+        description: 新建时填本分区下一个数字；已有文章不要改，否则文件名和 URL 都会变。
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+        description: false 才会出现在列表和 RSS 中。
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+        required: true
+        description: 填中文分类名，与现有文章一致，不要填英文 slug。
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        description: 填中文标签名，可留空；标签页由构建时生成。
+      - name: body
+        label: 正文
+        type: rich-text
+        description: Markdown 正文。图片继续用 https://static.williamlong.info/upload/... 的 CDN 地址，不要换成仓库内图片。
+
+  # ---------- 网站运营优化 ----------
+  - name: info
+    label: 网站运营优化
+    type: collection
+    path: content/info/archives
+    format: yaml-frontmatter
+    filename: "{fields.slug}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+        description: 纯文本，不要带引号或 HTML。
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ssxxx"
+        description: 与现有文章一致，写作 2011-02-01T09:21:22+08:00。
+      - name: slug
+        label: 编号（= 文件名 = URL）
+        type: string
+        required: true
+        pattern:
+          regex: "^[0-9]+$"
+          message: 只能填数字，并与本分区已有文章不重复
+        description: 新建时填本分区下一个数字；已有文章不要改，否则文件名和 URL 都会变。
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+        description: false 才会出现在列表和 RSS 中。
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+        required: true
+        description: 填中文分类名，与现有文章一致，不要填英文 slug。
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        description: 填中文标签名，可留空；标签页由构建时生成。
+      - name: body
+        label: 正文
+        type: rich-text
+        description: Markdown 正文。图片继续用 https://static.williamlong.info/upload/... 的 CDN 地址，不要换成仓库内图片。
+
+  # ---------- 移动应用观察 ----------
+  - name: apps
+    label: 移动应用观察
+    type: collection
+    path: content/apps/archives
+    format: yaml-frontmatter
+    filename: "{fields.slug}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+        description: 纯文本，不要带引号或 HTML。
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ssxxx"
+        description: 与现有文章一致，写作 2011-02-01T09:21:22+08:00。
+      - name: slug
+        label: 编号（= 文件名 = URL）
+        type: string
+        required: true
+        pattern:
+          regex: "^[0-9]+$"
+          message: 只能填数字，并与本分区已有文章不重复
+        description: 新建时填本分区下一个数字；已有文章不要改，否则文件名和 URL 都会变。
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+        description: false 才会出现在列表和 RSS 中。
+      - name: categories
+        label: 分类
+        type: string
+        list: true
+        required: true
+        description: 填中文分类名（如「帮助」），与现有文章一致，不要填英文 slug。
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+        description: 填中文标签名，可留空；标签页由构建时生成。
+      - name: body
+        label: 正文
+        type: rich-text
+        description: Markdown 正文。图片继续用 https://static.williamlong.info/upload/... 的 CDN 地址，不要换成仓库内图片。
