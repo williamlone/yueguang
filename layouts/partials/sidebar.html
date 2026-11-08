@@ -1,29 +1,22 @@
 {{- $key := partial "section-key.html" . -}}
 {{- $terms := index hugo.Data.terms $key -}}
 {{- $search := hugo.Data.search -}}
-{{- $default := index (where $search.engines "id" $search.default) 0 -}}
-{{- if not $default }}{{ $default = index $search.engines 0 }}{{ end -}}
-{{- $action := index (split $default.url "?") 0 -}}
+{{- $engine := index (where $search.engines "id" $search.default) 0 -}}
+{{- if not $engine }}{{ $engine = index $search.engines 0 }}{{ end -}}
+{{- $action := index (split $engine.url "?") 0 -}}
+{{- $sitePrefix := "" -}}
+{{- if and $engine.site $search.site }}{{ $sitePrefix = printf "site:%s" $search.site }}{{ end -}}
 <div id="sidebar" class="sidebar alpha omega">
 	<div class="sidebar-box clearfix">
 		<h4>搜索</h4>
 		<ul class="divSearchPanel">
 			<div>
-				<form method="get" action="{{ $action }}" id="siteSearchForm">
-					<input type="text" name="{{ $default.param }}" id="edtSearch" size="12" value="" placeholder="搜索本站" />
+				<form method="get" action="{{ $action }}" id="siteSearchForm"{{ with $sitePrefix }} data-site-prefix="{{ . }}"{{ end }}>
+					<input type="text" name="{{ $engine.param }}" id="edtSearch" size="12" value="" placeholder="搜索本站" />
 					<input type="submit" value="提交" name="btnG" id="btnPost" />
-					<div class="search-engine-row">
-						<label for="searchEngine">搜索引擎</label>
-						<select id="searchEngine" aria-label="选择搜索引擎">
-							{{- range $search.engines }}
-							<option value="{{ .id }}"{{ if eq .id $default.id }} selected{{ end }}>{{ .name }}</option>
-							{{- end }}
-						</select>
-					</div>
 				</form>
 			</div>
 		</ul>
-		<script>window.SITE_SEARCH = {{ dict "default" $default.id "site" $search.site "engines" $search.engines | jsonify | safeJS }};</script>
 	</div>
 	<div class="sidebar-box clearfix">
 		<h4>网站分类</h4>

@@ -127,36 +127,3 @@
   margin-top: 0;
 }
 
-/* 搜索栏：搜索引擎下拉 */
-.search-engine-row {
-  display: flex;
-  align-items: center;
-  width: 250px;
-  margin-top: 8px;
-}
-
-.search-engine-row label {
-  flex: 0 0 auto;
-  margin-right: 8px;
-  color: #666;
-  font-size: 13px;
-}
-
-#searchEngine {
-  flex: 1 1 auto;
-  width: 150px;
-  height: 28px;
-  padding: 0 6px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  outline: none;
-  color: #444;
-  background-color: #fff;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-#searchEngine:focus {
-  border-color: #64A7BF;
-}
-

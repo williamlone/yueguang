@@ -1,15 +1,15 @@
 # 搜索栏配置
-# 增删搜索引擎、调整顺序、切换默认引擎都只改本文件，不需要动模板。
+# 切换引擎只改 default；增删引擎只改 engines，模板不用动。
 #
-# default  默认引擎的 id
-# site     全站限定条件；引擎的 site 为 true 时，会自动在关键词前加上 "site:这段内容"
+# default  当前使用的引擎 id（表单的 action 与参数名都由它决定）
+# site     全站限定条件；当前引擎的 site 为 true 时才拼 "site:这段内容"
 # engines  引擎列表
-#   id     唯一标识，同时作为下拉框的 value 和选择记忆的 key
-#   name   下拉框里显示的名称
-#   url    查询地址模板，{q} 会被替换成 URL 编码后的关键词
-#   param  查询参数名（无 JS 时表单直接提交用）
+#   id     唯一标识
+#   name   引擎名称（仅备注，页面不再显示下拉框）
+#   url    查询地址模板，{q} 只用于拼出 action（查询串会被去掉）
+#   param  查询参数名，即输入框的 name
 #   site   是否加 site: 限定。不支持 site: 的引擎设为 false，只按关键词搜索
-default: bing
+default: baidu
 site: williamlong.info
 engines:
   - id: bing
