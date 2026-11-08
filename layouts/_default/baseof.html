@@ -27,8 +27,10 @@
 	<link rel="stylesheet" type="text/css" media="all" href="{{ relURL "theme/style.css" }}">
 	<link rel="stylesheet" type="text/css" media="all" href="{{ relURL "theme/custom.css" }}">
 	<title>{{ $title }}</title>
+	{{- if eq .RelPermalink site.Home.RelPermalink }}
 	<meta name="description" content="{{ $desc }}">
 	<meta name="keywords" content="{{ site.Params.keywords }}">
+	{{- end }}
 	<link rel="canonical" href="{{ .Permalink }}">
 	<link rel="alternate" type="application/rss+xml" href="{{ $rss }}" title="{{ $sec.name }}">
 </head>
